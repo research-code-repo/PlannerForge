@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlannerForge: LLM Agents for Scenario-Based Testing of Motion Planners in Autonomous Driving</title>
+<meta name="description" content="PlannerForge is an LLM-agent framework that unifies the full scenario-based testing pipeline for motion planners in autonomous driving.">
+<meta property="og:title" content="PlannerForge: LLM Agents for Scenario-Based Testing of Motion Planners in Autonomous Driving">
+<meta property="og:description" content="An LLM-agent framework that unifies all eight scenario-based-testing stages for autonomous-driving motion planners under a single chatbot-driven interface.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --fg:#1a1a1f;
+    --muted:#5b6068;
+    --line:#e6e8ec;
+    --accent:#1f6feb;
+    --accent-soft:#eaf1fe;
+    --card:#f7f8fa;
+    --maxw:980px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+
+  /* Header */
+  header.hero{
+    padding:64px 0 28px;
+    border-bottom:1px solid var(--line);
+    text-align:center;
+  }
+  .venue{
+    display:inline-block;
+    font-size:13px;letter-spacing:.04em;font-weight:600;text-transform:uppercase;
+    color:var(--accent);
+    background:var(--accent-soft);
+    padding:5px 12px;border-radius:999px;margin-bottom:22px;
+  }
+  h1.title{
+    font-family:"Newsreader",Georgia,serif;
+    font-weight:600;
+    font-size:clamp(28px,4.4vw,44px);
+    line-height:1.18;
+    letter-spacing:-.01em;
+    margin:0 auto 18px;
+    max-width:820px;
+  }
+  h1.title .pf{color:var(--accent)}
+  .authors{font-size:18px;color:var(--fg);font-weight:500;margin:0 0 4px}
+  .affil{font-size:15px;color:var(--muted);margin:0 0 24px}
+  .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#23262b;color:#fff;
+    padding:10px 18px;border-radius:999px;
+    font-size:14.5px;font-weight:600;
+    border:1px solid #23262b;transition:.15s;
+  }
+  .btn:hover{background:#000;text-decoration:none;transform:translateY(-1px)}
+  .btn.ghost{background:#fff;color:var(--muted);border-color:var(--line);cursor:not-allowed}
+  .btn.ghost:hover{background:#fff;transform:none;color:var(--muted)}
+  .btn svg{width:16px;height:16px;fill:currentColor}
+
+  /* Sections */
+  section{padding:46px 0;border-bottom:1px solid var(--line)}
+  h2{
+    font-family:"Newsreader",Georgia,serif;
+    font-weight:600;font-size:28px;margin:0 0 20px;text-align:center;letter-spacing:-.01em;
+  }
+  .teaser{padding:38px 0 30px;text-align:center}
+  figure{margin:0}
+  figure img{
+    max-width:100%;height:auto;border-radius:10px;
+    border:1px solid var(--line);background:#fff;
+  }
+  figure.bare img{border:none}
+  figcaption{font-size:14px;color:var(--muted);margin-top:12px;max-width:760px;margin-left:auto;margin-right:auto}
+  .abstract p{font-size:17px;color:#33373d;margin:0 auto;max-width:800px;text-align:justify}
+
+  /* Stats cards */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:6px 0 0}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 14px;text-align:center}
+  .stat .num{font-family:"Newsreader",serif;font-size:30px;font-weight:600;color:var(--accent);line-height:1.1}
+  .stat .lab{font-size:13px;color:var(--muted);margin-top:6px}
+
+  /* Stage pills */
+  .stages{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:840px;margin:24px auto 0}
+  .stage{
+    font-size:14px;font-weight:500;
+    padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);
+    display:flex;align-items:center;gap:8px;
+  }
+  .stage .i{width:20px;height:20px;border-radius:50%;background:var(--accent-soft);color:var(--accent);
+    font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .stage.new{background:var(--accent-soft);border-color:#cfe0fb}
+  .stage.new .i{background:var(--accent);color:#fff}
+  .legend{text-align:center;font-size:13px;color:var(--muted);margin-top:14px}
+  .legend b{color:var(--accent)}
+
+  /* highlight list */
+  .findings{max-width:820px;margin:0 auto;padding:0;list-style:none}
+  .findings li{
+    padding:14px 0 14px 30px;border-bottom:1px solid var(--line);position:relative;font-size:16px;color:#33373d;
+  }
+  .findings li:last-child{border-bottom:none}
+  .findings li::before{content:"";position:absolute;left:4px;top:22px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+  .findings b{color:var(--fg)}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;margin-top:8px}
+
+  /* Demo placeholder */
+  .demo-ph{
+    max-width:820px;margin:0 auto;
+    aspect-ratio:16/9;
+    border:2px dashed #c9d3e3;border-radius:16px;
+    background:
+      radial-gradient(120% 120% at 50% 0%, var(--accent-soft) 0%, #fbfcfe 55%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;gap:14px;padding:24px;
+  }
+  .demo-ph .play{
+    width:74px;height:74px;border-radius:50%;
+    background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 30px rgba(31,111,235,.30);
+  }
+  .demo-ph .play svg{width:30px;height:30px;fill:currentColor;margin-left:4px}
+  .demo-ph .soon{font-family:"Newsreader",serif;font-size:24px;font-weight:600;color:var(--fg)}
+  .demo-ph .sub{font-size:15px;color:var(--muted);max-width:460px}
+  .demo-ph .badge{
+    font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;
+    color:var(--accent);background:#fff;border:1px solid #cfe0fb;
+    padding:5px 12px;border-radius:999px;
+  }
+
+  /* BibTeX */
+  pre{
+    background:#1c1f24;color:#e6e8ec;border-radius:10px;padding:20px;overflow-x:auto;
+    font-family:"JetBrains Mono",monospace;font-size:13px;line-height:1.6;
+  }
+  footer{padding:34px 0 48px;text-align:center;color:var(--muted);font-size:14px}
+  .anon-note{font-size:13px;color:var(--muted);max-width:720px;margin:18px auto 0;text-align:center}
+
+  @media(max-width:720px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .grid2{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="venue">Under Review &middot; Anonymous Submission</span>
+    <h1 class="title"><span class="pf">PlannerForge</span>: LLM Agents for Scenario-Based Testing of Motion Planners in Autonomous Driving</h1>
+    <p class="authors">Anonymous Authors</p>
+    <p class="affil">Paper under double-blind review</p>
+    <div class="btns">
+      <a class="btn ghost" title="Code release coming soon" aria-disabled="true">
+        <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        Code &nbsp;<span style="font-weight:400;opacity:.75">(coming soon)</span>
+      </a>
+      <a class="btn ghost" href="#demo" title="Demo coming soon" style="cursor:pointer">
+        <svg viewBox="0 0 16 16"><path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0Zm-1.6 4.4 5 3.6-5 3.6V4.4Z"/></svg>
+        Demo &nbsp;<span style="font-weight:400;opacity:.75">(coming soon)</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Framework (teaser) -->
+<section id="framework" style="padding-top:38px">
+  <div class="wrap">
+    <figure class="bare">
+      <img src="assets/framework.png" alt="PlannerForge framework: eight scenario-based-testing stages driven by LLM agents.">
+      <figcaption><b>The PlannerForge framework.</b> A chatbot-driven interface routes user intent across the full testing pipeline, unifying the six Riedmaier scenario-based-testing stages with two LLM-era stages.</figcaption>
+    </figure>
+    <div class="stages">
+      <div class="stage"><span class="i">1</span>Scenario Source</div>
+      <div class="stage"><span class="i">2</span>Generation</div>
+      <div class="stage"><span class="i">3</span>Database</div>
+      <div class="stage"><span class="i">4</span>Selection</div>
+      <div class="stage"><span class="i">5</span>Test Execution</div>
+      <div class="stage"><span class="i">6</span>ADS Assessment</div>
+      <div class="stage new"><span class="i">+</span>ADS Enhancement</div>
+      <div class="stage new"><span class="i">+</span>ADS Benchmarking</div>
+    </div>
+    <p class="legend">Stages&nbsp;1&ndash;6 follow the Riedmaier scenario-based-testing taxonomy; <b>+</b>&nbsp;marks the two LLM-era stages introduced by PlannerForge.</p>
+  </div>
+</section>
+
+<!-- Abstract -->
+<section class="abstract" id="abstract">
+  <div class="wrap">
+    <h2>Abstract</h2>
+    <p>
+      Ensuring autonomous-driving safety is a critical challenge. Scenario-based testing is the systematic process used to validate autonomous-driving systems (ADS), but it remains a fragmented modular pipeline in which scenario generation, retrieval, modification, ADS execution, and result analysis are performed by separate tools with little interaction. LLM agents have shown promise across ADS sub-systems such as perception, planning, and control; however, to our knowledge no prior work covers this scenario-based testing pipeline for ADS as a single LLM-agent framework. We present <b>PlannerForge</b>, an LLM-agent framework that extends all six scenario-based-testing stages (Scenario Generation through ADS Assessment) with two further LLM-era stages, ADS Enhancement and ADS Benchmarking, and integrates two open-source motion planners (Frenetix and MP-RBFN) under a unified interface. We evaluate PlannerForge with ten off-the-shelf LLMs across the five framework tasks under five prompt conditions; best-per-task scores reach 0.88&ndash;1.00, with open-source 20&ndash;35B backends matching commercial APIs on most tasks. Three chatbot-driven qualitative workflows further demonstrate end-to-end coverage: an LLM-driven scenario modification with a measurable safety-criticality shift, a cost-tuning loop that lifts a motion planner's success rate from 38.0% to 63.2%, and a single-prompt cross-planner batch comparison; together they show that PlannerForge can be driven by off-the-shelf LLM agents without domain-specific fine-tuning.
+    </p>
+  </div>
+</section>
+
+<!-- Highlights -->
+<section id="highlights">
+  <div class="wrap">
+    <h2>At a Glance</h2>
+    <div class="stats">
+      <div class="stat"><div class="num">8</div><div class="lab">unified pipeline stages</div></div>
+      <div class="stat"><div class="num">10</div><div class="lab">off-the-shelf LLMs<br>(5 open &middot; 5 commercial)</div></div>
+      <div class="stat"><div class="num">0.88&ndash;1.00</div><div class="lab">best-per-task scores</div></div>
+      <div class="stat"><div class="num">2</div><div class="lab">integrated motion planners</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Chatbot Demo -->
+<section id="demo">
+  <div class="wrap">
+    <h2>Chatbot Demo</h2>
+    <div class="demo-ph">
+      <span class="badge">Coming soon</span>
+      <div class="play" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div class="soon">Interactive walkthrough coming soon</div>
+      <p class="sub">A video demonstration of the PlannerForge chatbot &mdash; driving scenario generation, modification, planner testing, and analysis from natural-language prompts &mdash; will be added here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Contributions -->
+<section id="contributions">
+  <div class="wrap">
+    <h2>Key Contributions</h2>
+    <ul class="findings">
+      <li><b>End-to-end LLM framework.</b> To our knowledge the first framework to unify all six Riedmaier scenario-based-testing stages together with two LLM-era stages (ADS Enhancement, ADS Benchmarking) in a single chatbot-driven pipeline.</li>
+      <li><b>Empirical evaluation.</b> Ten off-the-shelf LLM backends (five commercial, five open-source; reasoning and non-reasoning) across the five core framework tasks under five prompt conditions &mdash; without any domain-specific fine-tuning.</li>
+      <li><b>Cross-planner benchmark.</b> A multi-planner interface (Frenetix and MP-RBFN) for comparative evaluation on framework-generated and -modified scenarios.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Results -->
+<section id="results">
+  <div class="wrap">
+    <h2>Results</h2>
+    <figure>
+      <img src="assets/results_tasks.png" alt="Per-task performance of ten LLM backends across the five framework tasks.">
+      <figcaption><b>Per-task performance.</b> Best-per-task scores reach 0.88&ndash;1.00, with open-source 20&ndash;35B backends matching commercial APIs on most tasks.</figcaption>
+    </figure>
+    <ul class="findings" style="margin-top:30px">
+      <li><b>Open beats expectations.</b> Open-source 20&ndash;35B models match commercial APIs on most of the five framework tasks.</li>
+      <li><b>Cost-tuning loop.</b> An LLM-driven cost-tuning workflow lifts a motion planner's success rate from <b>38.0%&nbsp;&rarr;&nbsp;63.2%</b>.</li>
+      <li><b>Safety-criticality shift.</b> LLM-driven scenario modification produces a measurable shift in scenario safety-criticality.</li>
+      <li><b>Single-prompt batch comparison.</b> One prompt drives a full cross-planner batch comparison across Frenetix and MP-RBFN.</li>
+    </ul>
+
+    <div class="grid2" style="margin-top:34px">
+      <figure>
+        <img src="assets/cross_planner_frenetix.png" alt="Cross-planner results: Frenetix.">
+        <figcaption><b>Cross-planner &mdash; Frenetix.</b></figcaption>
+      </figure>
+      <figure>
+        <img src="assets/cross_planner_rbfn.png" alt="Cross-planner results: MP-RBFN.">
+        <figcaption><b>Cross-planner &mdash; MP-RBFN.</b></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- BibTeX -->
+<section id="bibtex">
+  <div class="wrap">
+    <h2>BibTeX</h2>
+    <pre>@inproceedings{plannerforge_anonymous,
+  title     = {PlannerForge: LLM Agents for Scenario-Based Testing of
+               Motion Planners in Autonomous Driving},
+  author    = {Anonymous Authors},
+  booktitle = {Under review},
+  year      = {2026},
+  note      = {Project homepage:
+               https://research-code-repo.github.io/PlannerForge/}
+}</pre>
+    <p class="anon-note">This page accompanies a paper currently under double-blind review. Author and institution details are withheld to preserve anonymity. Code will be released upon publication.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    PlannerForge &middot; Anonymous project homepage &middot; <a href="#abstract">back to top</a>
+  </div>
+</footer>
+
+</body>
+</html>
